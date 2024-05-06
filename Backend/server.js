@@ -15,7 +15,7 @@ app.get('/main', (req, res) => {
   then((res) => {
     res.send('get route');
   }).catch((error) => {
-    res.send('error', error);
+    res.status(500).send({ error: error.toString() });
   });
 });
 
