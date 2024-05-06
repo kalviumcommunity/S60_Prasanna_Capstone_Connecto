@@ -26,5 +26,5 @@ The interface is user appealing and pleasing.
 
 # **_Sorts:_**
 
-Contractors and people can view works based on their requirement by sorting out according to their preferance. 
+Hierers and people can view works based on their requirement by sorting out according to their preferance. 
 
