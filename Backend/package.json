@@ -4,7 +4,8 @@
   "description": "The project mainly aims to empower employability for people who involve in fundamental jobs and daily wage workers. It connects these workers directly to people and hireres who need the workers.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
