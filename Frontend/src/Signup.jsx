@@ -24,7 +24,10 @@ function Signup() {
     e.preventDefault();
     try {
       console.log(formData);
-      const res = await axios.post('http://localhost:3553/signup', formData);
+      const res = await axios.post(
+        'https://s60-prasanna-capstone-connecto.onrender.com/signup',
+        formData
+      );
       console.log(res.data.message);
       if (res.data.message === 'ok') {
         navigate('/Mainpg');
@@ -45,28 +48,6 @@ function Signup() {
       console.log('error', err.response);
     }
   };
-  // const handleFile = (e) => {
-  //   let a = e.target.files[0];
-  //   // console.log(a)
-  //   let b = new FileReader();
-  //   b.readAsDataURL(a);
-  //   b.onload = (event) => {
-  //     // console.log(event.target.result);
-  //     axios
-  //       .post('https://api.cloudinary.com/v1_1/ddpebfutl/image/upload', {
-  //         file: event.target.result,
-  //         upload_preset: 'tg5wbsjz',
-  //       })
-  //       .then((r) => {
-  //         setFormData({...formData,profile:r.data.secure_url});
-  //         console.log(r.data);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   };
-  // };
-
   return (
     <div className="flex flex-col items-center justify-center h-3/4 ">
       <div className="w-full max-w-md rounded-lg shadow-md p-6">
