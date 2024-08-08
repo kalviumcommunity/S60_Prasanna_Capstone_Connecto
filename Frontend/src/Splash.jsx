@@ -1,7 +1,7 @@
 import react, { useEffect, useState, useContext, createContext } from 'react';
 import axios from 'axios';
-// import EntityCard from './EntityCard';
-// import Login from './Login';
+import EntityCard from './EntityCard';
+import Login from './Login';
 import './App.css';
 import logoColor from './assets/logo-color1.png';
 import workerimg from './assets/worker-animated-nobg.png';
