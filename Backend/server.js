@@ -11,8 +11,14 @@ const { OAuth2Client } = require('google-auth-library');
 const client = process.env.GOOGLE_CLIENT_ID;
 
 const app = express();
-app.use(cors());
 app.use(bodyParser.json());
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  methods: 'GET,POST,DELETE,PUT',
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 const connectDB = async () => {
   try {
@@ -67,7 +73,7 @@ app.get('/main', (req, res) => {
 });
 app.get('/', (res, req) => {
   try {
-    res.send('backend is working');
+    req.send('backend is working');
   } catch (err) {
     console.log('some error in backend');
   }
