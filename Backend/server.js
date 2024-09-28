@@ -110,7 +110,7 @@ app.get('/', (res, req) => {
 app.post('/signup', async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (user) {
-    res.status(400).send({ message: 'get out' }); // Status 400 for existing user
+    res.status(400).send({ message: 'get out' }); 
   } else {
     const { error, value } = userJoiSchema.validate(req.body);
     if (error) {

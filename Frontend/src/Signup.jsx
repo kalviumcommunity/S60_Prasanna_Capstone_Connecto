@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import Login from './Login';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Mainpg from './mainpg';
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -13,6 +11,7 @@ function Signup() {
     confirmpassword: '',
     gender: 'male',
   });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,28 +27,23 @@ function Signup() {
         'https://s60-prasanna-capstone-connecto-1.onrender.com/signup',
         formData
       );
-      console.log(res.data.message);
+
       if (res.data.message === 'ok') {
-        navigate('/Mainpg');
+        navigate('/Mainpg'); // Redirects to Mainpg on successful signup
       } else if (res.data.message === 'get out') {
-        alert('Your email is already in our databse. Please Login');
+        alert('Your email is already in our database. Please Login');
         navigate(`/Login`);
       }
-      setFormData({
-        name: '',
-        email: '',
-        confirmemail: '',
-        password: '',
-        confirmpassword: '',
-        gender: 'male',
-        // profile: '',
-      });
     } catch (err) {
       console.log('error', err.response);
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message); // Displays the error message from the backend
+      }
     }
   };
+
   return (
-    <div className="flex flex-col items-center justify-center h-3/4 ">
+    <div className="flex flex-col items-center justify-center h-3/4">
       <div className="w-full max-w-md rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-sky-500 mb-4">Sign Up</h2>
         <form className="flex flex-col" onSubmit={handleSubmit}>
@@ -57,16 +51,15 @@ function Signup() {
             placeholder="Name"
             name="name"
             value={formData.name}
-            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-slate-500 transition ease-in-out duration-150"
+            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4"
             type="text"
             onChange={handleChange}
           />
-
           <input
             placeholder="Email"
             name="email"
             value={formData.email}
-            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-slate-500 transition ease-in-out duration-150"
+            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4"
             type="email"
             onChange={handleChange}
           />
@@ -74,7 +67,7 @@ function Signup() {
             placeholder="Confirm Email"
             name="confirmemail"
             value={formData.confirmemail}
-            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-slate-500 transition ease-in-out duration-150"
+            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4"
             type="email"
             onChange={handleChange}
           />
@@ -82,7 +75,7 @@ function Signup() {
             placeholder="Password"
             name="password"
             value={formData.password}
-            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-slate-500 transition ease-in-out duration-150"
+            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4"
             type="password"
             onChange={handleChange}
           />
@@ -90,21 +83,12 @@ function Signup() {
             placeholder="Confirm Password"
             name="confirmpassword"
             value={formData.confirmpassword}
-            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-slate-500 transition ease-in-out duration-150"
+            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4"
             type="password"
             onChange={handleChange}
           />
-          {/* <input
-            placeholder="Profile"
-            name="profile"
-            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
-            type="file"
-            onChange={handleFile}
-          /> */}
-
           <select
-            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-slate-500 transition ease-in-out duration-150"
-            id="gender"
+            className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4"
             name="gender"
             value={formData.gender}
             onChange={handleChange}
@@ -113,22 +97,21 @@ function Signup() {
             <option value="female">Female</option>
             <option value="other">Other</option>
           </select>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
           <p className="text-gray-900 mt-4">
-            {' '}
             Already have an account?{' '}
-            <p
-              className="text-sky-500 hover:underline "
+            <span
+              className="text-sky-500 hover:underline cursor-pointer"
               onClick={() => {
                 navigate(`/Login`);
               }}
             >
               Login
-            </p>
+            </span>
           </p>
           <button
-            className="bg-gradient-to-r from-indigo-500 to-sky-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 transition ease-in-out duration-150"
+            className="bg-gradient-to-r from-indigo-500 to-sky-500 text-white font-bold py-2 px-4 rounded-md mt-4"
             type="submit"
-            // onSubmit={handleSubmit}
           >
             Sign Up
           </button>
