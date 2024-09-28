@@ -13,7 +13,10 @@ const client = process.env.GOOGLE_CLIENT_ID;
 const app = express();
 app.use(bodyParser.json());
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: [
+    'http://localhost:5173',
+    'https://66f7b9361465ed8e7e106d54--benevolent-cocada-37ad35.netlify.app/',
+  ],
   methods: 'GET,POST,DELETE,PUT',
   credentials: true,
 };
