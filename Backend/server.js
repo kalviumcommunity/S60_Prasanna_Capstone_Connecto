@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 const corsOptions = {
   origin: [
     'http://localhost:5173',
-    'https://66f7b9361465ed8e7e106d54--benevolent-cocada-37ad35.netlify.app/',
+    'https://66f7d29867e03e9f105116a5--brilliant-alpaca-9a29eb.netlify.app/',
   ],
   methods: 'GET,POST,DELETE,PUT',
   credentials: true,
