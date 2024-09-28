@@ -12,16 +12,22 @@ const client = process.env.GOOGLE_CLIENT_ID;
 
 const app = express();
 app.use(bodyParser.json());
+
 const corsOptions = {
   origin: [
     'http://localhost:5173',
-    'https://66f7d29867e03e9f105116a5--brilliant-alpaca-9a29eb.netlify.app/',
+    'https://66f7d29867e03e9f105116a5--brilliant-alpaca-9a29eb.netlify.app',
+    'https://brilliant-alpaca-9a29eb.netlify.app', // Add this line
   ],
-  methods: 'GET,POST,DELETE,PUT',
+  methods: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
+  optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));
+
+app.options('*', cors(corsOptions));
 
 const connectDB = async () => {
   try {
@@ -231,8 +237,8 @@ app.delete('/store/:id', async (req, res) => {
   }
 });
 
-const PORT = 5335;
+const PORT = process.env.PORT || 5335;
 app.listen(PORT, async () => {
   await connectDB();
-  console.log(`Port listening to ${PORT} port`);
+  console.log(`Server listening on port ${PORT}`);
 });
