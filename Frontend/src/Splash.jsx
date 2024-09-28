@@ -63,7 +63,7 @@ function Splash() {
         </div>
         <div className="flex justify-around items-center w-1/2">
           <div className=" size-80 rounded-full flex items-center justify-around bg-sky-100">
-            <img src={workerimg} alt="" className=" w-64 rounded-full" />
+            <img src={workerimg} alt="workerImage" className=" w-64 rounded-full" />
           </div>
         </div>
       </div>
