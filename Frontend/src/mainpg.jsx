@@ -32,7 +32,7 @@ function Mainpg() {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get('http://localhost:5335/main')
+      .get('https://s60-prasanna-capstone-connecto.onrender.com/main')
       .then((res) => {
         console.log('Fetch successful');
         if (res.data.length > 0) {
@@ -57,7 +57,7 @@ function Mainpg() {
   const deletingTheItem = (id) => {
     console.log('hi');
     axios
-      .delete(`http://localhost:5335/store/${id}`)
+      .delete(`https://s60-prasanna-capstone-connecto.onrender.com/store/${id}`)
       .then((res) => {
         console.log(res, 'deleted');
         location.reload();
