@@ -81,10 +81,36 @@ app.get('/', (res, req) => {
     console.log('some error in backend');
   }
 });
+// app.post('/signup', async (req, res) => {
+//   const user = await User.findOne({ email: req.body.email });
+//   if (user) {
+//     res.send({ message: 'get out' });
+//   } else {
+//     const { error, value } = userJoiSchema.validate(req.body);
+//     if (error) {
+//       return res.status(400).json({ message: error.details[0].message });
+//     }
+//     if (req.body.email !== req.body.confirmemail) {
+//       return res.status(400).json({ message: 'Emails do not match' });
+//     }
+//     if (req.body.password !== req.body.confirmpassword) {
+//       return res.status(400).json({ message: 'Passwords do not match' });
+//     }
+//     try {
+//       const salt = await bcrypt.genSalt(10);
+//       const hashedPassword = await bcrypt.hash(value.password, salt);
+//       const newUser = await User.create({ ...value, password: hashedPassword });
+//       res.send({ message: 'ok' });
+//     } catch (error) {
+//       console.log('error', error);
+//     }
+//   }
+// });
+
 app.post('/signup', async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (user) {
-    res.send({ message: 'get out' });
+    res.status(400).send({ message: 'get out' }); // Status 400 for existing user
   } else {
     const { error, value } = userJoiSchema.validate(req.body);
     if (error) {
@@ -100,9 +126,10 @@ app.post('/signup', async (req, res) => {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(value.password, salt);
       const newUser = await User.create({ ...value, password: hashedPassword });
-      res.send({ message: 'ok' });
+      return res.status(201).send({ message: 'ok' }); // Status 201 for successful creation
     } catch (error) {
       console.log('error', error);
+      return res.status(500).send({ message: 'Server error' });
     }
   }
 });
