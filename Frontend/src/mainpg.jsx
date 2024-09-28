@@ -32,7 +32,7 @@ function Mainpg() {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get('https://s60-prasanna-capstone-connecto.onrender.com/main')
+      .get('https://s60-prasanna-capstone-connecto-1.onrender.com/main')
       .then((res) => {
         console.log('Fetch successful');
         if (res.data.length > 0) {

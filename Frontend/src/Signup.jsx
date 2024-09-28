@@ -25,7 +25,7 @@ function Signup() {
     try {
       console.log(formData);
       const res = await axios.post(
-        'https://s60-prasanna-capstone-connecto.onrender.com/signup',
+        'https://s60-prasanna-capstone-connecto-1.onrender.com/signup',
         formData
       );
       console.log(res.data.message);

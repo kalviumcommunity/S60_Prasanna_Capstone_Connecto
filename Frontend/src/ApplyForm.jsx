@@ -24,7 +24,7 @@ function Applyform() {
   const handleSubmit = () => {
     console.log(state);
     axios
-      .post('https://s60-prasanna-capstone-connecto.onrender.com/main', state)
+      .post('https://s60-prasanna-capstone-connecto-1.onrender.com/main', state)
       .then((res) => {
         console.log(res);
         navigate('/Mainpg');
