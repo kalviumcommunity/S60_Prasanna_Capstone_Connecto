@@ -32,7 +32,7 @@ function Login(props) {
     e.preventDefault();
     try {
       const res = await axios.post(
-        'https://s60-prasanna-capstone-connecto.onrender.com/login',
+        'https://s60-prasanna-capstone-connecto-1.onrender.com/login',
         formData
       );
       if (res.data.message === 'Invalid credentials or user not existed') {
