@@ -65,7 +65,13 @@ app.get('/main', (req, res) => {
       res.send(err);
     });
 });
-
+app.get('/', (res, req) => {
+  try {
+    res.send('backend is working');
+  } catch (err) {
+    console.log('some error in backend');
+  }
+});
 app.post('/signup', async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   if (user) {
