@@ -4,23 +4,23 @@ import { useNavigate } from 'react-router-dom';
 
 function Applyform() {
   const navigate = useNavigate();
-  const [state, setState] = useState({
-    Name: '',
-    PhoneNumber: '',
-    Work: 0,
-    Email: '',
-    Profile: '',
-    WorkExp: '',
-    Location: '',
-    ExpectedSalary: '',
-  });
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setState((previousData) => ({
-      ...previousData,
-      [name]: value,
-    }));
-  };
+  // const [state, setState] = useState({
+  //   Name: '',
+  //   PhoneNumber: '',
+  //   Work: 0,
+  //   Email: '',
+  //   Profile: '',
+  //   WorkExp: '',
+  //   Location: '',
+  //   ExpectedSalary: '',
+  // });
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setState((previousData) => ({
+  //     ...previousData,
+  //     [name]: value,
+  //   }));
+  // };
   const handleSubmit = () => {
     console.log(state);
     axios
