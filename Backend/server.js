@@ -145,81 +145,81 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.post('/google-login', async (req, res) => {
-  const { token } = req.body;
+// app.post('/google-login', async (req, res) => {
+//   const { token } = req.body;
 
-  console.log('Received token:', token);
+//   console.log('Received token:', token);
 
-  if (!token) {
-    return res.status(400).json({ message: 'No token provided' });
-  }
+//   if (!token) {
+//     return res.status(400).json({ message: 'No token provided' });
+//   }
 
-  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+//   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-  try {
-    const ticket = await client.verifyIdToken({
-      idToken: token,
+//   try {
+//     const ticket = await client.verifyIdToken({
+//       idToken: token,
 
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+//       audience: process.env.GOOGLE_CLIENT_ID,
+//     });
 
-    const payload = ticket.getPayload();
+//     const payload = ticket.getPayload();
 
-    const { email, name, sub: googleId } = payload;
+//     const { email, name, sub: googleId } = payload;
 
-    let user = await User.findOne({ email });
+//     let user = await User.findOne({ email });
 
-    if (!user) {
-      const salt = await bcrypt.genSalt(10);
+//     if (!user) {
+//       const salt = await bcrypt.genSalt(10);
 
-      const hashedPassword = await bcrypt.hash(
-        googleId + process.env.PASSWORD_SALT,
+//       const hashedPassword = await bcrypt.hash(
+//         googleId + process.env.PASSWORD_SALT,
 
-        salt
-      );
+//         salt
+//       );
 
-      user = new User({
-        name,
+//       user = new User({
+//         name,
 
-        email,
+//         email,
 
-        password: hashedPassword,
+//         password: hashedPassword,
 
-        googleId,
-      });
+//         googleId,
+//       });
 
-      await user.save();
-    }
+//       await user.save();
+//     }
 
-    res.json({
-      message: 'Login successful',
+//     res.json({
+//       message: 'Login successful',
 
-      userId: user._id,
+//       userId: user._id,
 
-      name: user.name,
+//       name: user.name,
 
-      email: user.email,
-    });
-  } catch (error) {
-    console.error('Error during Google login:', error);
+//       email: user.email,
+//     });
+//   } catch (error) {
+//     console.error('Error during Google login:', error);
 
-    if (error.message.includes('Token used too late')) {
-      res
+//     if (error.message.includes('Token used too late')) {
+//       res
 
-        .status(400)
+//         .status(400)
 
-        .json({ message: 'Token expired. Please try logging in again.' });
-    } else if (error.message.includes('Invalid token')) {
-      res
+//         .json({ message: 'Token expired. Please try logging in again.' });
+//     } else if (error.message.includes('Invalid token')) {
+//       res
 
-        .status(400)
+//         .status(400)
 
-        .json({ message: 'Invalid token. Please try logging in again.' });
-    } else {
-      res.status(500).json({ message: 'Server error during authentication' });
-    }
-  }
-});
+//         .json({ message: 'Invalid token. Please try logging in again.' });
+//     } else {
+//       res.status(500).json({ message: 'Server error during authentication' });
+//     }
+//   }
+// });
 
 app.post('/main', async (req, res) => {
   console.log(
