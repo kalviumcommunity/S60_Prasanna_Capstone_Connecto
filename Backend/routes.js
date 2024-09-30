@@ -4,6 +4,7 @@ const { OAuth2Client } = require('google-auth-library');
 const User = require('./models/User'); // Import User model
 const ModelDb = require('./models/ModelDb'); // Import Main model
 const Joi = require('joi');
+const validateInput = require('./helpers/validateInput'); // Import validation helper
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const router = express.Router();
@@ -19,35 +20,28 @@ const userJoiSchema = Joi.object({
 
 // GET route to check if the backend is working
 router.get('/', (req, res) => {
-  try {
-    res.send('backend is working');
-  } catch (err) {
-    console.log('some error in backend');
-  }
+  res.send('backend is working');
 });
 
 // GET route to fetch data from ModelDb
-router.get('/main', async (req, res) => {
+router.get('/main', async (req, res, next) => {
   try {
     const data = await ModelDb.find({});
     res.json(data);
   } catch (err) {
-    res.status(500).send(err);
+    next(err); // Passes error to error handler
   }
 });
 
 // POST route for signup
-router.post('/signup', async (req, res) => {
-  const user = await User.findOne({ email: req.body.email });
-
-  if (user) {
-    res.status(400).send({ message: 'User already exists' });
-  } else {
-    const { error, value } = userJoiSchema.validate(req.body);
-
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+router.post('/signup', async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      return res.status(400).json({ message: 'User already exists' });
     }
+
+    const validatedUser = validateInput(userJoiSchema, req.body); // Validate input using helper
 
     if (req.body.email !== req.body.confirmemail) {
       return res.status(400).json({ message: 'Emails do not match' });
@@ -57,51 +51,44 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ message: 'Passwords do not match' });
     }
 
-    try {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(value.password, salt);
-      const newUser = await User.create({ ...value, password: hashedPassword });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(validatedUser.password, salt);
+    const newUser = await User.create({ ...validatedUser, password: hashedPassword });
 
-      return res.status(201).send({ message: 'User registered successfully' });
-    } catch (error) {
-      console.log('error', error);
-      return res.status(500).send({ message: 'Server error' });
-    }
+    res.status(201).send({ message: 'User registered successfully' });
+  } catch (error) {
+    next(error); // Passes error to error handler
   }
 });
 
 // POST route for login
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-
-    if (user && bcrypt.compare(req.body.password, user.password)) {
+    if (user && await bcrypt.compare(req.body.password, user.password)) {
       res.json({ message: 'Login successful' });
     } else {
-      res.status(400).send({ message: 'Invalid credentials' });
+      res.status(400).json({ message: 'Invalid credentials' });
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).send('Error during login');
+    next(error); // Passes error to error handler
   }
 });
 
 // POST route for Google login
-router.post('/google-login', async (req, res) => {
-  const { token } = req.body;
-
-  if (!token) {
-    return res.status(400).json({ message: 'No token provided' });
-  }
-
+router.post('/google-login', async (req, res, next) => {
   try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ message: 'No token provided' });
+    }
+
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const { email, name, sub: googleId } = ticket.getPayload();
-
     let user = await User.findOne({ email });
 
     if (!user) {
@@ -111,41 +98,38 @@ router.post('/google-login', async (req, res) => {
       await user.save();
     }
 
-    res.json({ message: 'Login successful', userId: user._id, name: user.name, email: user.email });
+    res.json({
+      message: 'Login successful',
+      userId: user._id,
+      name: user.name,
+      email: user.email,
+    });
   } catch (error) {
-    console.error('Error during Google login:', error);
-
-    if (error.message.includes('Token used too late')) {
-      res.status(400).json({ message: 'Token expired. Please try logging in again.' });
-    } else if (error.message.includes('Invalid token')) {
-      res.status(400).json({ message: 'Invalid token. Please try logging in again.' });
-    } else {
-      res.status(500).json({ message: 'Server error during authentication' });
-    }
+    next(error); // Passes error to error handler
   }
 });
 
 // POST route for creating new data
-router.post('/main', async (req, res) => {
+router.post('/main', async (req, res, next) => {
   try {
     const newData = await ModelDb.create(req.body);
     res.status(201).send(newData);
   } catch (error) {
-    res.status(500).send({ message: 'Error creating data' });
+    next(error); // Passes error to error handler
   }
 });
 
 // DELETE route for removing data by ID
-router.delete('/store/:id', async (req, res) => {
+router.delete('/store/:id', async (req, res, next) => {
   try {
     const deleted = await ModelDb.findByIdAndDelete(req.params.id);
     if (deleted) {
       res.send('Deleted successfully');
     } else {
-      res.status(404).send({ message: 'Data not found' });
+      res.status(404).json({ message: 'Data not found' });
     }
   } catch (error) {
-    res.status(500).send({ message: 'Error deleting data' });
+    next(error); // Passes error to error handler
   }
 });
 
