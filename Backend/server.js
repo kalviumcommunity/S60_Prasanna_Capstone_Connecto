@@ -221,26 +221,26 @@ app.post('/google-login', async (req, res) => {
   }
 });
 
-// app.post('/main', async (req, res) => {
-//   console.log(
-//     req.body,
-//     '--------------------------------------------------------------'
-//   );
-//   await ModelDb.create(req.body);
-//   return res.send(req.body);
-// });
+app.post('/main', async (req, res) => {
+  console.log(
+    req.body,
+    '--------------------------------------------------------------'
+  );
+  await ModelDb.create(req.body);
+  return res.send(req.body);
+});
 
-// app.delete('/store/:id', async (req, res) => {
-//   try {
-//     const deleted = await ModelDb.findByIdAndDelete(req.params.id);
-//     console.log(deleted);
-//     res.send('deleted');
-//   } catch {
-//     (error) => {
-//       console.log(error);
-//     };
-//   }
-// });
+app.delete('/store/:id', async (req, res) => {
+  try {
+    const deleted = await ModelDb.findByIdAndDelete(req.params.id);
+    console.log(deleted);
+    res.send('deleted');
+  } catch {
+    (error) => {
+      console.log(error);
+    };
+  }
+});
 
 const PORT = process.env.PORT || 5335;
 app.listen(PORT, async () => {
