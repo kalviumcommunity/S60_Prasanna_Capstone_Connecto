@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Signup from './Signup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { GoogleLogin } from 'react-google-login';
-import { gapi } from 'gapi-script';
+// import { GoogleLogin } from 'react-google-login';
+// import { gapi } from 'gapi-script';
 import Mainpg from './mainpg';
 import connectologo from './assets/connecto-logo-color-removebg-preview.png';
 
-const clientId =
-  '598048758838-enhddjp4p7aecbg815on7utseok98276.apps.googleusercontent.com';
+// const clientId =
+//   '598048758838-enhddjp4p7aecbg815on7utseok98276.apps.googleusercontent.com';
 
 function Login(props) {
   const navigate = useNavigate();
@@ -47,46 +47,46 @@ function Login(props) {
     }
   };
 
-  const onSuccess = async (res) => {
-    console.log('Google Sign-In successful', res);
-    try {
-      const response = await axios.post(
-        'https://s60-prasanna-capstone-connecto.onrender.com/google-login',
-        {
-          token: res.tokenId,
-        }
-      );
+  // const onSuccess = async (res) => {
+  //   console.log('Google Sign-In successful', res);
+  //   try {
+  //     const response = await axios.post(
+  //       'https://s60-prasanna-capstone-connecto.onrender.com/google-login',
+  //       {
+  //         token: res.tokenId,
+  //       }
+  //     );
 
-      if (response.data.message === 'Login successful') {
-        handleSuccessfulLogin(response.data);
-      } else {
-        alert('Google login failed. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error during Google login:', error);
-      alert('An error occurred during Google login. Please try again.');
-    }
-  };
+  //     if (response.data.message === 'Login successful') {
+  //       handleSuccessfulLogin(response.data);
+  //     } else {
+  //       alert('Google login failed. Please try again.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during Google login:', error);
+  //     alert('An error occurred during Google login. Please try again.');
+  //   }
+  // };
 
-  const onFailure = (res) => {
-    console.log('login is unsuccessful', res);
-  };
+  // const onFailure = (res) => {
+  //   console.log('login is unsuccessful', res);
+  // };
 
-  useEffect(() => {
-    async function start() {
-      try {
-        await gapi.load('client:auth2', async () => {
-          await gapi.client.init({
-            clientId: clientId,
-            scope: 'email profile',
-          });
-        });
-      } catch (error) {
-        console.error('Error loading or initializing Google API client', error);
-      }
-    }
-    start();
-  }, []);
+  // useEffect(() => {
+  //   async function start() {
+  //     try {
+  //       await gapi.load('client:auth2', async () => {
+  //         await gapi.client.init({
+  //           clientId: clientId,
+  //           scope: 'email profile',
+  //         });
+  //       });
+  //     } catch (error) {
+  //       console.error('Error loading or initializing Google API client', error);
+  //     }
+  //   }
+  //   start();
+  // }, []);
 
   return (
     <div className="bg-[#ffffff] h-screen ">
